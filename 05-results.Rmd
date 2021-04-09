@@ -10,7 +10,6 @@ tsData = ts(df$All.Cause, start = c(2014,1), frequency = 12)
 plot(tsData, main = "Time Series Plot for Given Data", ylab = "Death Counts")
 ```
 
-
 Intuitively, death counts per month can be plotted and modeled by time series since data are collected on a monthly basis.
 
 
@@ -19,7 +18,7 @@ Therefore, we would analyze the time series model using some graphs.
 
 
 ```{r}
-decomposed_data = decompose(tsData)
+decomposed_data = stats::decompose(tsData)
 plot(decomposed_data)
 ```
 
@@ -34,10 +33,10 @@ Stationarity and seasonality hold. Time series plot seems like a good approach a
 
 
 ```{r}
-sink("file")
+#sink("file")
 fitARIMA <- auto.arima(tsData, trace=TRUE) 
-sink()
-file.remove("file")
+#sink()
+#file.remove("file")
 ```
 ```{r}
 
@@ -120,6 +119,7 @@ ggplot() +
        subtitle = "Figure 1") +
   theme(plot.title = element_text(hjust = 0.5))
 ```
+
 The dark blue line is a predicted line which simulates the death counts if there were no pandemic.
 We have predicted 2019 death counts to see if the pandemic had started before 2020 under the under cover of winter flu. Logically, the earlier in 2019, the less likely the pandemic had started. Therefore, the early data in 2019 could also serve as a validation set. Before Nov 2019, the two graphs are similar in terms of shape and values. This reassures that the fitted model is accurate. Based on this plot, we have three observations:
 1. Predictions always overestimated death counts before Nov 2019. The actual death counts surpassed prediction in Nov 2019 and the number kept increasing until May 2020 while it was expected to drop according to predictions. It seems the actual line has deviated from predictions since Nov 2019, which supports our first belief that the pandemic had started before 2020.
@@ -180,5 +180,303 @@ Therefore, the pandemic did not start before 2020. Based on only data and plots,
 
 
 ## Belief 3
+
+### Country
+We gathered the data from 2020-04-12	to 2021-04-03	in US. In the 3rd of April, more than 30M people in the US has been infected with coronavirus and 0.6M people has dead because of covid. From April in 2020 to November in 2020, there are steady increase in the number of confirmed people but after November, there is a surge in the number of confirmed people until February 2021, the surge trend has been slowing down.
+
+```{r}
+data1 <- data %>%
+    select(Date, Confirmed , Deaths) %>%
+    gather(key = group, value = "Cases", -Date, na.rm = TRUE) %>%
+    group_by(Date, group) %>%
+    summarise(n = sum(Cases, na.rm = F), .groups = "drop_last") 
+
+data1 %>%  ggplot(aes(x=Date, y = n, color=group)) + 
+    geom_line(size = 1.5) +
+    scale_linetype_manual(values=c("solid", "twodash", "dotted")) +
+   geom_label_repel(data = data1[data1$Date == max(data1$Date),], 
+                    aes(label = paste0(round(n/1000000, 1), " M")), hjust = -0.2, 
+                   fontface = "bold", size = 5.8, alpha = 0.85, show.legend = F) +
+    coord_cartesian(clip = 'off') +
+    scale_y_continuous(labels = scales::comma) +
+    scale_x_date(date_breaks = "months" , date_labels = "%b-%y")  + theme(axis.title.x = element_blank()) +
+    labs(title = "Reported Cases in time", subtitle = "US COVID 19: 2020-2021", y = "Frequency") 
+```
+
+
+
+### State
+
+After getting the sense of the overall country,  I have displayed Top 5 states in terms of number of cumulated confirmed cases as below. In terms of confirmed case, California is top 1: 487.1 million people has beed afftected by covid 19 in total, followed by Texas and Florida, 390.1 and 304.7 seperately. In terms of Deaths case, New York has most death cases (12.5M) followed by California and Texas. The death rate of New York (4.7%) is much higher than California (1.5%) though the confirmed case of California is larger than the confirmed case of New York .
+
+
+```{r}
+data %>%
+    select(State, Confirmed, Deaths) %>%
+    gather(key = group_var, value = "Cases", -State, na.rm = TRUE) %>%
+    group_by(State, group_var) %>%
+    summarise(n = sum(Cases, na.rm = F), .groups = "drop_last") %>%
+    arrange(desc(n)) %>%
+    group_by(group_var) %>% 
+    slice(1:5) %>%
+    ggplot(aes(x = State, y = n, fill=State)) +
+    geom_bar(stat = "identity") +
+    facet_grid(~ group_var, scales = "free") +
+    geom_label(aes(label=round(n/1000000, 1)), size=3, fill="white") +
+    labs(title = "Top States per Case Type", subtitle = "Numbers in Millions")  + theme(axis.text.y = element_blank(),
+                     axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1),
+                     axis.title = element_blank())
+```
+
+
+#### State over time
+
+After observing the overall cases in cumulated term, we want to see how the Confirmed/Deaths number change in state throughout time.
+New York shows the sudden increase at the beginning of the pandemic and has the most cases. However, it showed a little sluggish relatively during summer on both confirmed cases and death cases until the end of the 2020 there is a surge increase.
+California and Texas have very similar trend at the beginning of the pandemic. Though the change of confirmed cases and death cases is fluctuating in this state, it keep increasing at a high speed. The increasing speed in confirmed cases of California exceed that of Texas around December of 2020 and after then California became the number one over all states in terms of confirmed cases. After Feb of 2021, The daily deathed cases of California surpassed New York and became the Number one over all states.
+Floria keeps a steady increase pace in terms of both death cases and confirmed cases and on April 2021, the daily confirmed case in Florida ranked 3rd and death cases ranked fourth over all States.
+Illiniois has slowest increasing speed compared to other four states at the beginning of pandemic. However, around Nov 2020, there is a sudden increase in daily cases. Illiniois ranked fifth in both daily confrimed cases and death cases on April 2021.
+
+
+
+```{r}
+par(mfrow = c(1, 2))
+sub_data <- data %>% filter(State %in% c('California', 'Florida', 'Illinois', 'New York','Texas'))
+plot1 <- ggplot(sub_data, aes(x=Date, y=Confirmed, colour=State,group=State)) + geom_line() + 
+  labs(title = "Top States Confirmed number", subtitle = "from 2020.04 to 2021.04")+  theme(
+                     axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1))
+
+plot2 <- ggplot(sub_data, aes(x=Date, y=Deaths, colour=State,group=State)) + geom_line() + 
+  labs(title = "Top States Deaths number", subtitle = "from 2020.04 to 2021.04")+  theme(
+                     axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1))
+
+grid.arrange(plot1, plot2, ncol = 2, top = "Cases change throught time")
+
+
+```
+
+
+#### State the latest report
+
+The interactive plot below shows the latest report on April 3rd  2021. This map can give us the intuitive sense of what is going on in different states. The color of different shades shows the number of confirmed cases in different states. We notice that, in April 3rd 2021, California has most number of confirmed cases followed by Texas and New York. The central area of United States has similar condition. Most confirmed cases are gathered in the east, west and south coastal regions.
+
+```{r}
+library(plotly)
+library(DT)
+data_recent <- data%>% filter(Date == '2021-04-03')
+data_recent$code <- state.abb[match(data_recent$State, state.name)]
+data_recent$hover <- with(data_recent, paste(State, '<br>', "Confirmed people:", Confirmed,"<br>","Death people:", Deaths)) 
+fig <- plot_geo(data_recent, locationmode = 'USA-states') 
+
+fig <- fig %>% add_trace(
+  locations = ~code,
+  type='choropleth',
+  z= data_recent$Confirmed,
+  text = ~hover,
+  color = ~Confirmed
+  
+)
+
+fig <- fig %>% layout(
+  title = 'Covid 19 situation in us by state')
+
+fig
+```
+
+To conclude,We noticed that there are clearly difference between each state in terms of confirmed and death cases. The increasing pattern over time for each state varies as well. These difference may due to complicated factors including density of population, mobility of population, government policy, state actions and etc.
+
+
+###3 Race
+
+#### Cases of Race in Different State
+
+We selected the most recent date avaible in our dataset (2021-03-07) and plot the number of confirmed cases for Asian, White and Black, Hispanic in the top 5 states in terms of number of confirmed cases individualy. We noticed that hispanic has most cases in California followed by Florida. The cases in Illinios and New Jersy has far more less that that in California in hispanic race. The total number of white cases ranked number one among all race and it distributed evenly among the top 5 states: California, Florida, Ohio, Pennsylvania and Tennessee. Asian has most confirmedcases in California and the total cases is the smallest compared to other three race. Black has even distribution for confirmed cases in top 5 states. 
+
+
+```{r}
+covid_race_data %>%
+    select(State_Name, Cases_Asian,Cases_White, Cases_Black, Cases_Hispanic = Cases_Ethnicity_Hispanic) %>%
+    gather(key = group_var, value = "Cases", -State_Name, na.rm = TRUE) %>%
+    group_by( group_var) %>%
+    arrange(desc(Cases)) %>%
+    slice(1:5) %>%
+    ggplot(aes(x = State_Name, y = Cases, fill=State_Name)) +
+    geom_bar(stat = "identity") +
+    facet_grid(~ group_var, scales = "free") +
+    geom_label(aes(label=round(Cases/1000, 1)), size=1.5, fill="white") +
+    labs(title = "Top States per confirmed case  by ethinicity", subtitle = "Numbers in thousand")  + theme(axis.text.y = element_blank(),
+                     axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1),
+                     axis.title = element_blank())
+```
+
+
+
+
+
+```{r}
+covid_race_data$hover <- with(covid_race_data, paste(State, '<br>', "Cases_Total:", Cases_Total,"<br>","Cases_White:", Cases_White)) 
+fig <- plot_geo(covid_race_data, locationmode = 'USA-states') 
+
+fig <- fig %>% add_trace(
+  locations = ~State,
+  type='choropleth',
+  z= covid_race_data$Cases_Total,
+  text = ~hover,
+  color = ~Cases_Total
+  
+)
+
+fig <- fig %>% layout(
+  title = 'Covid 19 situation in us by state')
+
+fig
+```
+
+
+
+
+```{r}
+covid_race_df_total <- as.data.frame(colSums(Filter(is.numeric, covid_race_data[, -1])))
+
+covid_race_df_total <- covid_race_df_total %>%
+  mutate(column_names = row.names(covid_race_df_total))
+
+colnames(covid_race_df_total) <- c("total_values", "column_names")
+
+covid_race_df_total <- covid_race_df_total %>%
+  pivot_wider(names_from = "column_names",
+              values_from = "total_values" )
+
+```
+
+
+
+```{r}
+cases_subset <- covid_race_df_total[1:13] %>%
+  pivot_longer(cols = everything(), names_to = "Race",
+               values_to = "Cases_Total") %>%
+  mutate(Race = gsub(".*_", "", Race)) %>%
+  filter(Race %in% c("White", "Hispanic", "Black", "Asian",
+                                  "Multiracial", "AIAN", "NHPI") )
+
+# Make deaths data longer
+deaths_subset <- covid_race_df_total[14:26] %>%
+  pivot_longer(cols = everything(), names_to = "Race",
+               values_to = "Deaths_Total") %>%
+  mutate(Race = gsub(".*_", "", Race)) %>%
+  filter(Race %in% c("White", "Hispanic", "Black", "Asian",
+                                  "Multiracial", "AIAN", "NHPI") )
+
+# Make population data longer
+total_population_subset <- cbind(covid_race_df_total[27], covid_race_df_total[35:41]) %>%
+  pivot_longer(cols = everything(), names_to = "Race",
+               values_to = "Population_Total") %>%
+  mutate(Race = gsub(".*_", "", Race)) %>%
+  filter(Race != "Population")
+
+```
+
+
+```{r}
+race_ethnicity_percents <- c(0.612, 0.153, 0.134, 0.059, 0.027, 0.013, 0.002)
+total_us_population <- sum(population_df$Population)
+pop_by_race <- round(total_us_population * race_ethnicity_percents,0)
+pop_race_df <- cbind.data.frame( 
+                                Race = c("White", "Hispanic", "Black", "Asian",
+                                  "Multiracial", "AIAN", "NHPI"),pop_by_race,race_ethnicity_percents)
+
+```
+
+
+
+```{r}
+merged_subset <- merge(cases_subset,deaths_subset, by = "Race") 
+merged_subset <- merge(merged_subset,pop_race_df, by = "Race") 
+
+merged_subset <- cbind.data.frame (merged_subset, 
+                                    Cases_in_1000 =  merged_subset$Cases_Total / merged_subset$pop_by_race * 1000,
+                                    Deaths_in_1000 = merged_subset$Deaths_Total/merged_subset$pop_by_race * 1000,
+                                    Deaths_in_cases = merged_subset$Deaths_Total /merged_subset$Cases_Total ,
+                                   Cases_percent = merged_subset$Cases_Total/sum(merged_subset$Cases_Total),
+                                   Deaths_percent = merged_subset$Deaths_Total/sum(merged_subset$Deaths_Total))
+``` 
+
+
+
+#### Cases of Race per 100000 People 
+
+In the above information, we only know white people has most cases in absolute value but we cannot conclude that white people has higher risk for covid 19, since white people may consititue for the highest population in US thus it has highest cases.Thus, I added population number for each ethinicity and calulated the cases propotion over their own ethnicity population individually (infection rate and death rate). In our analysis, we only considered main ethinicity "White", "Hispanic", "Black", "Asian", "Multiracial", "AIAN", "NHPI". We displayed the COVID-19 cases per 100,000 people by ethnicity below. From graph, we noticed that in 100000 Hispanic people, 88 people was affected by covid and 2 people was dead due to covid-19. Hispanic has highest infection rate and death rate due to covid-19 among seven race. NHPI was ranked second. Among 100000 NHPI people, 76 people was affected by covid and 2 people was dead due to covid-19. It is note worthy that though white has largest number of confirmed cases and death cases in total, its infection rate and death rate is ranked fourth and thrid among these seven races. We may conclude that Hispanic and NHPI may be more vulnerable to COVID-19 compared with other races.
+
+
+
+```{r}
+par(mfrow = c(1, 2))
+p1 <- ggplot(merged_subset, aes(x = reorder(Race, Cases_in_1000), y = Cases_in_1000)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  geom_text(aes(label = round(Cases_in_1000, 0)),
+          position = position_dodge(width=0.9), vjust=-0.25) +
+  labs(x = "Race or ethnicity", y = "Cases per 100,000 people", title = "Cases in 1000") +coord_flip()
+
+p2 <- ggplot(merged_subset, aes(x = reorder(Race, Deaths_in_1000), y = Deaths_in_1000)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  geom_text(aes(label = round(Deaths_in_1000, 0)),
+          position = position_dodge(width=0.9), vjust=-0.25) +
+  labs(x = "Race or ethnicity", y = "Cases per 100,000 ",
+      title = "Deaths in 1000") +coord_flip()
+
+grid.arrange(p1, p2, ncol = 2, top = "COVID-19 cases per 100,000 people by Race")
+
+```
+
+
+
+
+
+#### Cases of Race per 100000 People 
+
+We want to investigate whether or not there is a significant difference in the number of COVID-19 deaths by ethnicity in the United States by using statistic method. By doing so, we compared the distribution of the US population by ethnicity to the distribution of COVID-19 deaths by ethnicity. The left pie chart shows the death cases percentage for each race and the right pie chart shows the actual ethnicity ratio in US.
+
+
+```{r}
+par(mfrow = c(1, 2))
+label_value <- paste('(', round(merged_subset$Deaths_percent * 100, 1), '%)', sep = '')
+label <- paste(merged_subset$Race, label_value, sep = '')
+
+p3 <- ggplot(data = merged_subset, mapping = aes(x = 'Content', y = Deaths_percent, fill = Race)) + geom_bar(stat = 'identity', position = 'stack') + coord_polar(theta = 'y')+  
+  theme(axis.text = element_blank())  + scale_fill_discrete(labels = label) + 
+  labs(x = 'Races', y = 'Deaths percentage', title = 'Deaths percentage in ratio')
+
+label_value1 <- paste('(', round(merged_subset$race_ethnicity_percents * 100, 1), '%)', sep = '')
+label1 <- paste(merged_subset$Race, label_value1, sep = '')
+
+p4 <- ggplot(data = merged_subset, mapping = aes(x = 'Content', y = race_ethnicity_percents, fill = Race)) + geom_bar(stat = 'identity', position = 'stack') + coord_polar(theta = 'y')+  
+  theme(axis.text = element_blank())  + scale_fill_discrete(labels = label1) + 
+  labs(x = 'Races', y = 'Ethnicity percentage in population', title = 'Ethnicity percentage in ratio')
+
+
+grid.arrange(p3, p4, ncol = 2, top = "Percentage of the US population by ethnicity compared 
+             to the percentage of COVID-19 deaths by ethnicity ")
+
+
+```
+
+
+Chi-Squared Test
+We used chi-sqaured test to test if the distribution of the US population by ethnicity is significantly different than the distribution of COVID-19 deaths by ethnicity. 
+
+Our null hypothesis (H0)  is that the distribution of our sample data (the number of COVID-19 deaths by race) matches the distribution of the population of the US by race.
+
+Our alternative hypothesis (Ha) here is that the distribution of our sample data does not match the distribution of the population of the US by race.
+
+
+```{r}
+observed_frequency_deaths <- merged_subset$Deaths_Total
+expected_frequency <- merged_subset$race_ethnicity_percents
+
+chisq.test(observed_frequency_deaths, p = expected_frequency) 
+```
+
+P- value is less than 2.2e-16 and X-squared = 19118. Since P- value is really small (less than 0.05), we can reject the null hypothesis at alpha level 0.05 and conclude that the distribution of COVID-19 deaths by race do not match what we would expect them to be (based on the distribution of population by race). It means some race may be more vulnerable to COVID-19 and some others are not.
+
 
 

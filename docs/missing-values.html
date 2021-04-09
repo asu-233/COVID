@@ -21,7 +21,7 @@
   
   
 
-<meta name="author" content="Jingyuan Wang, HUaqing Fang" />
+<meta name="author" content="Jingyuan Wang, Huaqing Fang" />
 
 
 <meta name="date" content="2021-04-09" />
@@ -34,7 +34,7 @@
 <link rel="prev" href="data-transformation.html"/>
 <link rel="next" href="results.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/jquery-3.5.1/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -51,6 +51,13 @@
 
 
 
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.9.3/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.57.1/plotly-latest.min.js"></script>
 
 
 
@@ -71,17 +78,40 @@
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
-<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
-<li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
+<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="data-sources.html"><a href="data-sources.html#belief-1-and-2"><i class="fa fa-check"></i><b>2.1</b> Belief 1 and 2</a></li>
+<li class="chapter" data-level="2.2" data-path="data-sources.html"><a href="data-sources.html#belief-3"><i class="fa fa-check"></i><b>2.2</b> Belief 3</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data Transformation</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#belief-1-and-2-1"><i class="fa fa-check"></i><b>3.1</b> Belief 1 and 2</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="data-transformation.html"><a href="data-transformation.html#in-terms-of-the-raw-data-for-analyzing-death-counts"><i class="fa fa-check"></i><b>3.1.1</b> In terms of the raw data for analyzing death counts</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#belief-3-1"><i class="fa fa-check"></i><b>3.2</b> Belief 3</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="data-transformation.html"><a href="data-transformation.html#in-terms-of-the-raw-data-for-analyzing-state"><i class="fa fa-check"></i><b>3.2.1</b> In terms of the raw data for analyzing state</a></li>
+<li class="chapter" data-level="3.2.2" data-path="data-transformation.html"><a href="data-transformation.html#in-terms-of-the-raw-data-for-analyzing-race"><i class="fa fa-check"></i><b>3.2.2</b> In terms of the raw data for analyzing race</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="missing-values.html"><a href="missing-values.html#belief-1-and-2-2"><i class="fa fa-check"></i><b>4.1</b> Belief 1 and 2</a></li>
+<li class="chapter" data-level="4.2" data-path="missing-values.html"><a href="missing-values.html#belief-3-2"><i class="fa fa-check"></i><b>4.2</b> Belief 3</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#belief-1-and-2"><i class="fa fa-check"></i><b>5.1</b> belief 1 and 2</a>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#belief-1-and-2-3"><i class="fa fa-check"></i><b>5.1</b> Belief 1 and 2</a>
 <ul>
 <li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#time-series-analysis"><i class="fa fa-check"></i><b>5.1.1</b> Time Series Analysis</a></li>
 <li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#comparison-and-analysis"><i class="fa fa-check"></i><b>5.1.2</b> Comparison and Analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#belief-3"><i class="fa fa-check"></i><b>5.2</b> Belief 3</a></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#belief-3-3"><i class="fa fa-check"></i><b>5.2</b> Belief 3</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="results.html"><a href="results.html#country"><i class="fa fa-check"></i><b>5.2.1</b> Country</a></li>
+<li class="chapter" data-level="5.2.2" data-path="results.html"><a href="results.html#state"><i class="fa fa-check"></i><b>5.2.2</b> State</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
@@ -106,6 +136,8 @@
             <section class="normal" id="section-">
 <div id="missing-values" class="section level1" number="4">
 <h1><span class="header-section-number">Chapter 4</span> Missing values</h1>
+<div id="belief-1-and-2-2" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Belief 1 and 2</h2>
 <p>Total number of missing data by columns</p>
 <pre><code>##            AllCause  Date.Of.Death.Year Date.Of.Death.Month            AgeGroup 
 ##                 151                   0                   0                   0 
@@ -113,12 +145,23 @@
 ##                   0                   0</code></pre>
 <p>Total number of rows:</p>
 <pre><code>## [1] 3000</code></pre>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-81-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-65-1.png" width="672" /></p>
 <p>There are 151 missing data in 3000 rows, around 5 percent missing rates. All missing values come from “AllCause”(death counts) column.
 To deal with these missing values, we divide all the data that do not have missing values into groups by their sex, race and age group and then calculate mean within each group. Eventually, we update all missing values to the mean of their respective group.</p>
 <pre><code>## [1] FALSE</code></pre>
 <p>After updates, there is no more missing values.</p>
+</div>
+<div id="belief-3-2" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Belief 3</h2>
+<p>We discovered the missing data pattern as below.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-70-1.png" width="672" /></p>
+<p>The graph shows that the following patterns:</p>
+<ol style="list-style-type: decimal">
+<li><p>Recovered variable is the one with the highest missing data volume over 25%. It is very hard for us to estimate the true value for missing recovered number and the missing volume is over 1/4 of total so we decided not to use this variable.</p></li>
+<li><p>Latitude and Longtitude have the same amount of missing data volumn less than 5%. After further inspectations, we found that data containing missing latitude and longtitude is from state ‘Diamond Princess’, ‘Grand Princess’ and ‘Recovered’. The reason behind that would be they cannot obtain exact latitude and longtitude for these three states. Moreover, these three states are not in the 50 official US states, so we decided to delete data in our dataset with these states.</p></li>
+</ol>
 
+</div>
 </div>
             </section>
 

@@ -1,17 +1,84 @@
-# Data transformation
+# Data Transformation
 
+## Belief 1 and 2
 ```{R}
-## code are written in the result section as data are transformed after each plot.
+## some code are written in the result section as data are transformed after each plot.
 ```
 
-"AH_Monthly_provisional_counts_of_deaths_by_age_group__sex__and_race_ethnicity_for_select_causes_of_death.csv" dataset has a lot of irrelevant information, we extract "AllCause", "Month", "Year" columns for plotting and "sex", "AgeGroup", "Race" for data cleaning.
+### In terms of the raw data for analyzing death counts
 
-We perform similar things to "Monthly_Counts_of_Deaths_by_Select_Causes__2014-2019.csv" dataset
+1. "AH_Monthly_provisional_counts_of_deaths_by_age_group__sex__and_race_ethnicity_for_select_causes_of_death.csv" dataset has a lot of irrelevant information, we extract "AllCause", "Month", "Year" columns for plotting and "sex", "AgeGroup", "Race" for data cleaning. We perform similar things to "Monthly_Counts_of_Deaths_by_Select_Causes__2014-2019.csv" dataset
 
-Month and Year are given separately, in order to give a plot where date is the x-axis, we need to merge these two columns and convert data into date format.
+2. Month and Year are given separately, in order to give a plot where date is the x-axis, we need to merge these two columns and convert data into date format.
 
-Time series models give predicted data as time series objects. We convert that into normal data frame for plotting.
+3. Time series models give predicted data as time series objects. We convert that into normal data frame for plotting.
 
-In order to plot predicted data and actual data as a continuous graph, we merge these 2 datasets/data frame.
+4. In order to plot predicted data and actual data as a continuous graph, we merge these 2 datasets/data frame.
 
-We have two data sets, one records data from 2014 to 2019, the other records data from 2019 to 2020. In order to make a continuous graph, we merge these two datasets/data frame.
+5. We have two data sets, one records data from 2014 to 2019, the other records data from 2019 to 2020. In order to make a continuous graph, we merge these two datasets/data frames.
+
+## Belief 3
+
+
+
+### In terms of the raw data for analyzing state
+1. Aggregate data: we concatenated the daily reports files for US daily data. In the end, the whole data sets contains US daily data from 2020-04-12 to 2021-04-03 in US. 
+2. Edit column variables: we only kept the columns 'Province_State', 'Country_Region', 'Lat','Long_','date' and renamed them as 'State', 'Country', 'Latitude', 'Longitude', 'Date' since only these columns are of our interest. We dropped the extra 12 columns.
+3. Format data: format date into this format "%m-%d-%Y".
+
+```{r pressure, echo=FALSE}
+## data for analyzing state
+data <- read_csv("covid-data-us.csv", col_types = cols(
+  X1 = col_double(),
+  Province_State = col_character(),
+  Country_Region = col_character(),
+  date = col_date(format = ""),
+  Lat = col_double(),
+  Confirmed = col_double(),
+  Deaths = col_double(),
+  Recovered = col_double()
+))
+
+data <- data %>% rename (c('Country' = "Country_Region", "State" = "Province_State", 'Latitude' = 'Lat', 'Longitude' = 'Long_', 'Date' = 'date'))                               
+
+# Inspect data
+#data %>% head(5)
+
+```
+
+### In terms of the raw data for analyzing race
+1. Extract data: the raw data population dataset containing population estimates in each state for all 2010 to 2020 but we only need the most recent population estimates so we extract the data we need.
+2. Merge dataset: we added a column to provide names for state abbreviations in race data so that race dataset and population dataset can be merged into one dataset by state name. 
+
+
+```{r}
+## data for analyzing race
+data_race <- read_csv("CRDT_Data.csv", col_types = cols(
+  .default = col_double(),
+  State = col_character()
+))
+
+
+data_race <- data_race  %>% filter(Date == max(Date)) %>% select (-Date)
+
+data_race$State_Name <- state.name[match(data_race$State, state.abb)]
+
+ population_df <- read_excel("nst-est2020.xlsx",
+                     range = "A9:N60",col_names = TRUE)
+
+population_df <- population_df[ ,c(1,14)]
+
+population_df <- population_df %>% rename (c('State_Name' = "West", "Population" = "78654756")) 
+
+population_df <- population_df  %>%
+  mutate(State_Name = sub('.', '', State_Name))
+#population_df
+covid_race_data <- inner_join(data_race, population_df, by = "State_Name")
+##Replace all the missing values with 0 value
+covid_race_data[is.na(covid_race_data)]=0
+#covid_race_data
+
+```
+
+
+
