@@ -1,12 +1,13 @@
 # Results
 
+## belief 1 and 2
 
-## Time Series Analysis
+### Time Series Analysis
 
 
 ```{R}
 tsData = ts(df$All.Cause, start = c(2014,1), frequency = 12)
-plot(tsData)
+plot(tsData, main = "Time Series Plot for Given Data", ylab = "Death Counts")
 ```
 
 
@@ -14,7 +15,7 @@ Intuitively, death counts per month can be plotted and modeled by time series si
 
 
 As the time series model is the foundation of our project, we would use it to predict death counts if there were pandemic (what would the data look like in a normal year). The predictions give us the baseline to compare with. Therefore, we want the predictions to be accurate and our model to be statistically reasonable.
-Therefore, we would analyze these using some graphs.
+Therefore, we would analyze the time series model using some graphs.
 
 
 ```{r}
@@ -24,16 +25,22 @@ plot(decomposed_data)
 
 Firstly, we want to check if the assumptions of stationarity and seasonality for time series hold.
 
-The decomposition of the time series plot shows trend, seasonal effects and white noise (randomness). As evident from the decomposition, the data exhibit strong seasonality with almost constant seasonal effects on a period of 12 and the trend is generally increasing with a few exceptions at 2015.6 and 2018.6. 
+The decomposition of the time series plot shows trend, seasonal effects and white noise (randomness). As evident from the decomposition, the data exhibit:
+1.Strong seasonality with almost constant seasonal effects on a period of 12. Logically, the constant seasonal effect also makes sense, suggesting that more people die in winter perhaps because of winter flu and temperature. 
+2.Trend is generally increasing with a few exceptions at 2015.6 and 2018.6. The trend agrees with what we have discovered in the introduction: death counts/rate is increasing in the past decade.
+3.There is no clusters or patterns. White noise is randomly distributed with a mean  of 0.
 
-The trend agrees what we have discovered in the introduction: death counts/rate is increasing in the past decade. Logically, the constant seasonal effect also makes sense, suggesting that more people die in winter perhaps because of winter flu and temperature. 
-
-Time series plot seems like a good approach and from here we develop some intuition that when comparing death counts, we we should take into account that there are more deaths in winter than in summer.
-
+Stationarity and seasonality hold. Time series plot seems like a good approach and from here we develop some intuition that when comparing death counts, we we should take into account that there are more deaths in winter than in summer.
 
 
 ```{r}
+sink("file")
 fitARIMA <- auto.arima(tsData, trace=TRUE) 
+sink()
+file.remove("file")
+```
+```{r}
+
 fitARIMA
 ```
 
@@ -45,7 +52,6 @@ pacf(tsData)
 ```
 
 The automatically generated model is ARIMA(1,0,0)(1,1,0)[12]. The ACF and PACF plots agree with that model and therefore we will be using this simple model to predict what would death counts look like if there were no pandemic 
-
 
 
 ```{R}
@@ -85,9 +91,7 @@ df_merge_actual['time'] =  as.yearmon(df_merge_actual$time,format = "%Y.%m")
 
 
 
-
-
-## comparison
+### Comparison and Analysis
 ```{r}
 df_pred["time"] = paste(df_pred$Year,df_pred$Month,sep='.')
 df_pred['time'] =  as.yearmon(df_pred$time,format = "%Y.%m")
@@ -111,24 +115,49 @@ ggplot() +
   scale_color_manual(values = c(
     'Predicted(without COVID)' = 'darkblue',
     'Actual(with COVID)' = 'red')) +
-  labs(x = "time", y = "death counts", 
-       title = "Best Fit Curve for Predicted Death Counts and Actual Death Counts") +
+  labs(x = "Time", y = "Death Counts", 
+       title = "Best Fit Curve for Predicted Death Counts and Actual Death Counts",
+       subtitle = "Figure 1") +
   theme(plot.title = element_text(hjust = 0.5))
 ```
+The dark blue line is a predicted line which simulates the death counts if there were no pandemic.
+We have predicted 2019 death counts to see if the pandemic had started before 2020 under the under cover of winter flu. Logically, the earlier in 2019, the less likely the pandemic had started. Therefore, the early data in 2019 could also serve as a validation set. Before Nov 2019, the two graphs are similar in terms of shape and values. This reassures that the fitted model is accurate. Based on this plot, we have three observations:
+1. Predictions always overestimated death counts before Nov 2019. The actual death counts surpassed prediction in Nov 2019 and the number kept increasing until May 2020 while it was expected to drop according to predictions. It seems the actual line has deviated from predictions since Nov 2019, which supports our first belief that the pandemic had started before 2020.
+2. The increasing trend in actual death counts was flattened in Jun and Jul 2020. It seems that pandemic became not as killing in summer. Yet, the difference between the two curves were still increasing and we should also remember that death counts is generally expected to be lower in summer. Therefore, we should take this into account and plot more graphs.
+3. The death counts rise again after July 2020. 
+
+We cannot conclude for the second belief. In order to further investigate our 2nd and 3rd observations made above, we use another graph to take a closer look at our data by month.
 
 
 ```{r}
 ggplot() +
-  geom_smooth(data=df_merge_pred, aes(x = time,y =All.Cause),
-              method = "loess",se = FALSE, color = "blue") +
-  geom_smooth(data=df_merge_actual, aes(x = time,y =All.Cause),
-              method = "loess",se = FALSE, color = "red") +
-  facet_wrap(~Month)
+  geom_smooth(data=df_merge_pred, 
+              aes(x = time,y =All.Cause, color = "Predicted(without COVID)") ,
+              method = "loess",se = FALSE) +
+  geom_smooth(data=df_merge_actual, 
+              aes(x = time,y =All.Cause, color = "Actual"),
+              method = "loess",se = FALSE) +
+  scale_color_manual(values = c(
+    'Predicted(without COVID)' = 'darkblue',
+    'Actual' = 'red')) +
+  facet_wrap(~Month) +
+  labs(x = "Time", y = "Death Counts", 
+       title = "Death Counts from 2014 to 2020 Group by Month",
+       subtitle = "Figure 2") +
+  theme(plot.title = element_text(hjust = 0.5), 
+        axis.text.x= element_text(angle= 75, vjust = -1, hjust = -1)) 
+  
 
 
+#
 ```
 
+This plot groups data by month, that is plotting 12 graphs according to 12 months. This removes month-induced effects. Based on figure 2, we have another 3 observations:
+1. The death counts in Feb and Mar 2020 were actually the same as predicted values. More importantly, we actual death counts in Jan 2020 is much less than the predicted. This not only rejects the first belief, but also conflicts with figure 1 which shows that death counts in Jan, Feb and Mar 2020 were more than the predicted.
+2. From May - Oct 2020, the death counts were greater than the predicted. However, the gradient of the red curve or differences between the two curves are less.
+3. Death counts surge again after Oct 2020.
 
+Therefore, we could almost conclude that the pandemic was not as killing in summer and only in summer. As for the conflicts we found in the first observation, we will investigate that using another plot.
 
 
 ```{r}
@@ -136,14 +165,20 @@ ggplot() +
   geom_line(data = df_pred, 
               aes(x = time,y =All.Cause, color = "Predicted(without COVID)")) +
   geom_line(data = df_2020_processed, 
-              aes(x = time,y =All.Cause, color = "Actual(with COVID)")) +
+              aes(x = time,y =All.Cause, color = "Actual")) +
   scale_color_manual(values = c(
     'Predicted(without COVID)' = 'darkblue',
-    'Actual(with COVID)' = 'red')) +
-  labs(x = "time", y = "death counts", 
-       title = "Line Plots of Predicted Death Counts and Actual Death Counts") +
+    'Actual' = 'red')) +
+  labs(x = "Time", y = "Death Counts", 
+       title = "Line Plots of Predicted Death Counts and Actual Death Counts",
+       subtitle = "Figure 3") +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
+This plots the raw data without any smoothing. Clearly, actual death counts were always less than the predicted before March 2020. Figure 1 gives us the illusion that actual death counts surpassed the predicted since Nov 2019 as the actual data in Nov 2019, Dec 2019, Jan 2020, Feb 2020 and Mar 2020 were pulled by the very big number in April 2020 in smoothing. 
+Therefore, the pandemic did not start before 2020. Based on only data and plots, its started after Mar 2020 which agrees with official records. The first belief is not true.
+
+
+## Belief 3
 
 

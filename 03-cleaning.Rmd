@@ -1,5 +1,9 @@
 # Data transformation
 
+```{R}
+## code are written in the result section as data are transformed after each plot.
+```
+
 "AH_Monthly_provisional_counts_of_deaths_by_age_group__sex__and_race_ethnicity_for_select_causes_of_death.csv" dataset has a lot of irrelevant information, we extract "AllCause", "Month", "Year" columns for plotting and "sex", "AgeGroup", "Race" for data cleaning.
 
 We perform similar things to "Monthly_Counts_of_Deaths_by_Select_Causes__2014-2019.csv" dataset

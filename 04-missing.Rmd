@@ -20,7 +20,7 @@ x = missing_data.frame(df_2020)
 image(x)
 ```
 
-There are 151 missing data in 3000 rows, around 5 percent missing rates. All missing values come from "AllCause" column.
+There are 151 missing data in 3000 rows, around 5 percent missing rates. All missing values come from "AllCause"(death counts) column.
 To deal with these missing values, we divide all the data that do not have missing values into groups by their sex, race and age group and then calculate mean within each group. Eventually, we update all missing values to the mean of their respective group. 
 
 

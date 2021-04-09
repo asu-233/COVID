@@ -60,6 +60,6 @@ In this project, which is initially inspired by the graph above, we would like t
 
 2. The pandemic became not as killing after summer 2020.
 
-3. Some specific groups of people (the white) are less prone to the virus.
+3. Caucasians (the US majority) are less prone to the virus.
 
-We would like to investigate the first two beliefs by comparing death counts and extend the last problem to a more general one: What are the factors that may affect death rate.
+We would like to investigate the first two beliefs by comparing death counts and extend the last problem to a more general one: does race affect infection rates.
