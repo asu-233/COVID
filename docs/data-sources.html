@@ -74,7 +74,11 @@
 <li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
-<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#time-series-analysis"><i class="fa fa-check"></i><b>5.1</b> Time Series Analysis</a></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#comparison"><i class="fa fa-check"></i><b>5.2</b> comparison</a></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="divider"></li>
@@ -98,6 +102,12 @@
             <section class="normal" id="section-">
 <div id="data-sources" class="section level1" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Data sources</h1>
+<p>All the data we use come from websites with “.gov” domain name for the sake of accuracy and reliability. Data are either collected by the Centers for Disease Control and Prevention (CDV) or John Hopkins University (JHU).</p>
+<p>There are several notable points about our datasets:</p>
+<ol style="list-style-type: decimal">
+<li><p>There are numerous reliable datasets recording COVID related information like infection rates, death rate etc, but we chose entirely different datasets (approach) by analyzing our first two problems from the perspective of all-cause death counts. We do not directly use COVID death counts as we believe that that data may be deceiving: that data only gives the number of people who die with COVID, but COVID may not be the leading cause of death (studies have shown that most people with COVID actually die from COVID complications). Therefore, we directly compare monthly death counts. This is kind of doing an AB test while holding everything else constant or in similar states except for the existence of the pandemic. As such, our data would help answer our questions.</p></li>
+<li><p>For the analysis of death counts, we have two datasets, namely "Monthly_Counts_of_Deaths_by_Select_Causes__2014-2019.csv" and "Monthly_provisional_counts_of_deaths_by_age_group__sex__and_race_ethnicity_for_select_causes_of_death__2019-2020.csv" from two websites. After we take summation on different age, sex and race for the 2nd dataset, both datasets give almost the same monthly death counts for the year of 2019, the only overlapped data. We believe this is a strong evidence of consistency and reliability.</p></li>
+</ol>
 
 </div>
             </section>
@@ -137,7 +147,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/YOUR GITHUB USERNAME/YOUR REPO NAME/edit/main/02-data.Rmd",
+"link": "https://github.com/https://github.com/asu-233/COVID/edit/main/02-data.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -145,7 +155,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/YOUR GITHUB USERNAME/YOUR REPO NAME/blob/main/02-data.Rmd",
+"link": "https://github.com/https://github.com/asu-233/COVID/blob/main/02-data.Rmd",
 "text": null
 },
 "download": null,

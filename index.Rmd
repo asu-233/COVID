@@ -24,6 +24,7 @@ library(mi)
 library(forecast)
 ```
 
+Check permission for webscraping
 ```{r}
 robotstxt::paths_allowed("https://www.macrotrends.net/countries/USA/united-states/death-rate")
 ```

@@ -1,1 +1,13 @@
 # Data transformation
+
+"AH_Monthly_provisional_counts_of_deaths_by_age_group__sex__and_race_ethnicity_for_select_causes_of_death.csv" dataset has a lot of irrelevant information, we extract "AllCause", "Month", "Year" columns for plotting and "sex", "AgeGroup", "Race" for data cleaning.
+
+We perform similar things to "Monthly_Counts_of_Deaths_by_Select_Causes__2014-2019.csv" dataset
+
+Month and Year are given separately, in order to give a plot where date is the x-axis, we need to merge these two columns and convert data into date format.
+
+Time series models give predicted data as time series objects. We convert that into normal data frame for plotting.
+
+In order to plot predicted data and actual data as a continuous graph, we merge these 2 datasets/data frame.
+
+We have two data sets, one records data from 2014 to 2019, the other records data from 2019 to 2020. In order to make a continuous graph, we merge these two datasets/data frame.

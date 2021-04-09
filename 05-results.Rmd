@@ -1,1 +1,149 @@
 # Results
+
+
+## Time Series Analysis
+
+
+```{R}
+tsData = ts(df$All.Cause, start = c(2014,1), frequency = 12)
+plot(tsData)
+```
+
+
+Intuitively, death counts per month can be plotted and modeled by time series since data are collected on a monthly basis.
+
+
+As the time series model is the foundation of our project, we would use it to predict death counts if there were pandemic (what would the data look like in a normal year). The predictions give us the baseline to compare with. Therefore, we want the predictions to be accurate and our model to be statistically reasonable.
+Therefore, we would analyze these using some graphs.
+
+
+```{r}
+decomposed_data = decompose(tsData)
+plot(decomposed_data)
+```
+
+Firstly, we want to check if the assumptions of stationarity and seasonality for time series hold.
+
+The decomposition of the time series plot shows trend, seasonal effects and white noise (randomness). As evident from the decomposition, the data exhibit strong seasonality with almost constant seasonal effects on a period of 12 and the trend is generally increasing with a few exceptions at 2015.6 and 2018.6. 
+
+The trend agrees what we have discovered in the introduction: death counts/rate is increasing in the past decade. Logically, the constant seasonal effect also makes sense, suggesting that more people die in winter perhaps because of winter flu and temperature. 
+
+Time series plot seems like a good approach and from here we develop some intuition that when comparing death counts, we we should take into account that there are more deaths in winter than in summer.
+
+
+
+```{r}
+fitARIMA <- auto.arima(tsData, trace=TRUE) 
+fitARIMA
+```
+
+
+```{r}
+par(mfrow= c(1,2))
+acf(tsData)
+pacf(tsData)
+```
+
+The automatically generated model is ARIMA(1,0,0)(1,1,0)[12]. The ACF and PACF plots agree with that model and therefore we will be using this simple model to predict what would death counts look like if there were no pandemic 
+
+
+
+```{R}
+predicted <- forecast(fitARIMA,h=24, level=c(99.5))
+plot(predicted)
+```
+
+Visually, the predicted data and the actual data look consistent. The predictions capture model trend and seasonality.
+
+
+```{R}
+df_pred = as.data.frame(predicted$mean)
+colnames(df_pred) <- "All.Cause"
+df_pred["Year"] = c(rep(2019,12),rep(2020,12))
+month_data = c(1,2,3,4,5,6,7,8,9,10,11,12)
+df_pred["Month"] = month_data
+
+```
+```{r}
+df_merge_pred = rbind(df, df_pred)
+df_merge_pred = df_merge_pred[order(df_merge_pred$Year, df_merge_pred$Month),]
+df_merge_pred["time"] = paste(df_merge_pred$Year,df_merge_pred$Month,sep='.')
+df_merge_pred['time'] =  as.yearmon(df_merge_pred$time,format = "%Y.%m")
+```
+
+
+```{R}
+#df_2020_processed = df_2020_actual[df_2020_actual$Year == 2020,]
+df_2020_processed = df_2020_actual
+df_merge_actual = rbind(df, df_2020_processed)
+df_merge_actual = df_merge_actual[order(df_merge_actual$Year, df_merge_actual$Month),]
+df_merge_actual["time"] = paste(df_merge_actual$Year,df_merge_actual$Month,sep='.')
+df_merge_actual['time'] =  as.yearmon(df_merge_actual$time,format = "%Y.%m")
+```
+
+
+
+
+
+
+
+## comparison
+```{r}
+df_pred["time"] = paste(df_pred$Year,df_pred$Month,sep='.')
+df_pred['time'] =  as.yearmon(df_pred$time,format = "%Y.%m")
+df_2020_processed["time"] = paste(df_2020_processed$Year,
+                                  df_2020_processed$Month,sep='.')
+df_2020_processed['time'] =  as.yearmon(df_2020_processed$time,format = "%Y.%m")
+```
+
+
+
+
+
+```{r}
+ggplot() +
+  geom_smooth(data = df_pred, 
+              aes(x = time,y =All.Cause, color = "Predicted(without COVID)"),
+              method = "loess",se = FALSE) +
+  geom_smooth(data = df_2020_processed, 
+              aes(x = time,y =All.Cause, color = "Actual(with COVID)"),
+              method = "loess",se = FALSE) +
+  scale_color_manual(values = c(
+    'Predicted(without COVID)' = 'darkblue',
+    'Actual(with COVID)' = 'red')) +
+  labs(x = "time", y = "death counts", 
+       title = "Best Fit Curve for Predicted Death Counts and Actual Death Counts") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+```{r}
+ggplot() +
+  geom_smooth(data=df_merge_pred, aes(x = time,y =All.Cause),
+              method = "loess",se = FALSE, color = "blue") +
+  geom_smooth(data=df_merge_actual, aes(x = time,y =All.Cause),
+              method = "loess",se = FALSE, color = "red") +
+  facet_wrap(~Month)
+
+
+```
+
+
+
+
+```{r}
+ggplot() +
+  geom_line(data = df_pred, 
+              aes(x = time,y =All.Cause, color = "Predicted(without COVID)")) +
+  geom_line(data = df_2020_processed, 
+              aes(x = time,y =All.Cause, color = "Actual(with COVID)")) +
+  scale_color_manual(values = c(
+    'Predicted(without COVID)' = 'darkblue',
+    'Actual(with COVID)' = 'red')) +
+  labs(x = "time", y = "death counts", 
+       title = "Line Plots of Predicted Death Counts and Actual Death Counts") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+

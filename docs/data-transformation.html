@@ -74,7 +74,11 @@
 <li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
-<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#time-series-analysis"><i class="fa fa-check"></i><b>5.1</b> Time Series Analysis</a></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#comparison"><i class="fa fa-check"></i><b>5.2</b> comparison</a></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="divider"></li>
@@ -98,6 +102,12 @@
             <section class="normal" id="section-">
 <div id="data-transformation" class="section level1" number="3">
 <h1><span class="header-section-number">Chapter 3</span> Data transformation</h1>
+<p>"AH_Monthly_provisional_counts_of_deaths_by_age_group__sex__and_race_ethnicity_for_select_causes_of_death.csv" dataset has a lot of irrelevant information, we extract “AllCause”, “Month”, “Year” columns for plotting and “sex”, “AgeGroup”, “Race” for data cleaning.</p>
+<p>We perform similar things to "Monthly_Counts_of_Deaths_by_Select_Causes__2014-2019.csv" dataset</p>
+<p>Month and Year are given separately, in order to give a plot where date is the x-axis, we need to merge these two columns and convert data into date format.</p>
+<p>Time series models give predicted data as time series objects. We convert that into normal data frame for plotting.</p>
+<p>In order to plot predicted data and actual data as a continuous graph, we merge these 2 datasets/data frame.</p>
+<p>We have two data sets, one records data from 2014 to 2019, the other records data from 2019 to 2020. In order to make a continuous graph, we merge these two datasets/data frame.</p>
 
 </div>
             </section>
@@ -137,7 +147,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/YOUR GITHUB USERNAME/YOUR REPO NAME/edit/main/03-cleaning.Rmd",
+"link": "https://github.com/https://github.com/asu-233/COVID/edit/main/03-cleaning.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -145,7 +155,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/YOUR GITHUB USERNAME/YOUR REPO NAME/blob/main/03-cleaning.Rmd",
+"link": "https://github.com/https://github.com/asu-233/COVID/blob/main/03-cleaning.Rmd",
 "text": null
 },
 "download": null,

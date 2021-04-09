@@ -1,1 +1,67 @@
 # Missing values
+
+
+Total number of missing data by columns
+```{R}
+
+df_2020 = df_2020 %>% select(Date.Of.Death.Year,Date.Of.Death.Month,
+                        AgeGroup,AllCause,Sex, Race.Ethnicity)
+colSums(is.na(df_2020)) %>% 
+  sort(decreasing= TRUE) 
+```
+Total number of rows:
+```{R}
+nrow(df_2020)
+```
+
+
+```{R}
+x = missing_data.frame(df_2020)
+image(x)
+```
+
+There are 151 missing data in 3000 rows, around 5 percent missing rates. All missing values come from "AllCause" column.
+To deal with these missing values, we divide all the data that do not have missing values into groups by their sex, race and age group and then calculate mean within each group. Eventually, we update all missing values to the mean of their respective group. 
+
+
+```{r}
+df_without_na = df_2020[!is.na(df_2020$AllCause),]
+
+dic = df_without_na %>% group_by(AgeGroup, Sex) %>%
+  summarise(avg = mean(AllCause))
+```
+
+
+```{R}
+for(i in 1:nrow(df_2020)) {
+    row <- df_2020[i,]
+    if (is.na(row$AllCause)){
+      avg = dic[dic$AgeGroup == row$AgeGroup 
+                & dic$Sex ==row$Sex,]$avg
+      df_2020[i,]$AllCause = avg
+      row <- df_2020[i,]
+    }
+
+}
+```
+
+
+```{R}
+any(is.na(df_2020))
+```
+
+After updates, there is no more missing values.
+
+
+```{r}
+df_2020_actual = df_2020  %>% group_by(Date.Of.Death.Month, Date.Of.Death.Year) %>%
+      summarise(All.Cause = sum(AllCause)) %>%
+  rename(
+    Month=Date.Of.Death.Month ,
+    Year= Date.Of.Death.Year 
+  )
+
+df_2020_actual = df_2020_actual[order(df_2020_actual$Year, df_2020_actual$Month),]
+df_2020_actual = df_2020_actual[df_2020_actual$Year != 2021,]
+
+```

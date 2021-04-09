@@ -3,5 +3,7 @@ data-sources
 data-transformation
 missing-values
 results
+time-series-analysis
+comparison
 interactive-component
 conclusion
