@@ -1,6 +1,6 @@
 --- 
 title: "COVID19 Analysis"
-author: "Jingyuan Wang, HUaqing Fang"
+author: "Jingyuan Wang, Huaqing Fang"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
