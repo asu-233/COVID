@@ -22,7 +22,35 @@ library(tidyverse)
 library(zoo)
 library(mi)
 library(forecast)
+library(readr)        
+library(ggplot2)      
+library(tidyverse)    
+library(gridExtra)    # multiple plots in 1
+library(scales)       # show the colors
+library(hexbin)       # for hive scatter
+library(naniar)       # to check for missing data
+library(lubridate)    # for date and time
+library(tm)
+library(reshape2)
+library(knitr)
+library(grid)
+library(igraph)
+library(ggraph)
+library(ggsci)
+library(circlize)
+
+library(VIM)          # missing values visual
+library(colorspace)   # maybe for wordcloud
+
+library(textmineR)
+library(ggrepel)
+library(readxl)
+
+library(data.table)
+library(devtools)
+
 ```
+
 
 Check permission for webscraping
 ```{r}
