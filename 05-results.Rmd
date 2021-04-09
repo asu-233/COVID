@@ -1,6 +1,6 @@
 # Results
 
-## belief 1 and 2
+## Belief 1 and 2
 
 ### Time Series Analysis
 

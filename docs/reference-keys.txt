@@ -3,7 +3,9 @@ data-sources
 data-transformation
 missing-values
 results
+belief-1-and-2
 time-series-analysis
-comparison
+comparison-and-analysis
+belief-3
 interactive-component
 conclusion
