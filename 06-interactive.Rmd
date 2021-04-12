@@ -3,7 +3,9 @@
 ## COVID-19 situation by ethinicity 
 
 This is a consolidation of our previous findings. This interactive plot enables readers to compare different statistics of their interests by themselves by clicking on different buttons
+
 This bar charts contain infected and death cases by ethnicity. 'Infected percentage in ratio' means the number of infected cases in one race divided by all infected cases. It shows the distribution of COVID-19 infected cases by ethnicity. 'Deaths percentage in ratio' means the number of death cases in one race divided by all deaths cases. It shows the distribution of COVID-19 death cases by ethnicity. 'Ethnicity percentage in ratio' means the distribution of the US population by ethnicity.
+
 By comparing these three bar charts, we can get a direct sense of whether there are differences between the actual ethnicity ratio in US and true deaths/cases ratio by ethnicity. Moreover, we add cases in 1000 and deaths in 1000 to directly shows which race is affected most by COVID-19 and which is the least.  Thus, we can get a intuitive idea of whether the COVID-19 situation differs by race. Otherwise, in the static bar plot, we cannot get the direct sense of how the ratio change by race. An interactive map has the advantages to compare both how ratio differs by ethnicity and how ratio differs in expected value(real ethnicity ratio) and true value(real death cases/infected races).
 
 
