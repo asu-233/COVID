@@ -52,9 +52,11 @@ library(devtools)
 ```
 
 
-Check permission for webscraping
+
 ```{r}
-robotstxt::paths_allowed("https://www.macrotrends.net/countries/USA/united-states/death-rate")
+#Permission check for webscraping
+
+#robotstxt::paths_allowed("https://www.macrotrends.net/countries/USA/united-states/death-rate")
 ```
 
 ```{r}

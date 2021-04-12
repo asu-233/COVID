@@ -20,8 +20,10 @@ country
 state
 state-over-time
 state-the-latest-report
+race
 cases-of-race-in-different-state
 cases-of-race-per-100000-people
 cases-of-race-per-100000-people-1
-interactive-component
+interactive-compenent
+covid-19-situation-by-ethinicity
 conclusion

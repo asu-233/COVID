@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 3 Data Transformation | COVID19 Analysis</title>
-  <meta name="description" content="Chapter 3 Data Transformation | COVID19 Analysis" />
+  <title>Chapter 6 Interactive compenent | COVID19 Analysis</title>
+  <meta name="description" content="Chapter 6 Interactive compenent | COVID19 Analysis" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 3 Data Transformation | COVID19 Analysis" />
+  <meta property="og:title" content="Chapter 6 Interactive compenent | COVID19 Analysis" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 3 Data Transformation | COVID19 Analysis" />
+  <meta name="twitter:title" content="Chapter 6 Interactive compenent | COVID19 Analysis" />
   
   
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="data-sources.html"/>
-<link rel="next" href="missing-values.html"/>
+<link rel="prev" href="results.html"/>
+<link rel="next" href="conclusion.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-3.5.1/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -138,39 +138,144 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="data-transformation" class="section level1" number="3">
-<h1><span class="header-section-number">Chapter 3</span> Data Transformation</h1>
-<div id="belief-1-and-2-1" class="section level2" number="3.1">
-<h2><span class="header-section-number">3.1</span> Belief 1 and 2</h2>
-<div id="in-terms-of-the-raw-data-for-analyzing-death-counts" class="section level3" number="3.1.1">
-<h3><span class="header-section-number">3.1.1</span> In terms of the raw data for analyzing death counts</h3>
-<ol style="list-style-type: decimal">
-<li><p>"AH_Monthly_provisional_counts_of_deaths_by_age_group__sex__and_race_ethnicity_for_select_causes_of_death.csv" dataset has a lot of irrelevant information, we extract “AllCause”, “Month”, “Year” columns for plotting and “sex”, “AgeGroup”, “Race” for data cleaning. We perform similar things to "Monthly_Counts_of_Deaths_by_Select_Causes__2014-2019.csv" dataset</p></li>
-<li><p>Month and Year are given separately, in order to give a plot where date is the x-axis, we need to merge these two columns and convert data into date format.</p></li>
-<li><p>Time series models give predicted data as time series objects. We convert that into normal data frame for plotting.</p></li>
-<li><p>In order to plot predicted data and actual data as a continuous graph, we merge these 2 datasets/data frame.</p></li>
-<li><p>We have two data sets, one records data from 2014 to 2019, the other records data from 2019 to 2020. In order to make a continuous graph, we merge these two datasets/data frames.</p></li>
-</ol>
-</div>
-</div>
-<div id="belief-3-1" class="section level2" number="3.2">
-<h2><span class="header-section-number">3.2</span> Belief 3</h2>
-<div id="in-terms-of-the-raw-data-for-analyzing-state" class="section level3" number="3.2.1">
-<h3><span class="header-section-number">3.2.1</span> In terms of the raw data for analyzing state</h3>
-<ol style="list-style-type: decimal">
-<li>Aggregate data: we concatenated the daily reports files for US daily data. In the end, the whole data sets contains US daily data from 2020-04-12 to 2021-04-03 in US.</li>
-<li>Edit column variables: we only kept the columns ‘Province_State’, ‘Country_Region’, ‘Lat’,‘Long_’,‘date’ and renamed them as ‘State’, ‘Country’, ‘Latitude’, ‘Longitude’, ‘Date’ since only these columns are of our interest. We dropped the extra 12 columns.</li>
-<li>Format data: format date into this format “%m-%d-%Y”.</li>
-</ol>
-</div>
-<div id="in-terms-of-the-raw-data-for-analyzing-race" class="section level3" number="3.2.2">
-<h3><span class="header-section-number">3.2.2</span> In terms of the raw data for analyzing race</h3>
-<ol style="list-style-type: decimal">
-<li>Extract data: the raw data population dataset containing population estimates in each state for all 2010 to 2020 but we only need the most recent population estimates so we extract the data we need.</li>
-<li>Merge dataset: we added a column to provide names for state abbreviations in race data so that race dataset and population dataset can be merged into one dataset by state name.</li>
-</ol>
+<div id="interactive-compenent" class="section level1" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Interactive compenent</h1>
+<div id="covid-19-situation-by-ethinicity" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> COVID-19 situation by ethinicity</h2>
+<p>This is a consolidation of our previous findings. This interactive plot enables readers to compare different statistics of their interests by themselves by clicking on different buttons
+This bar charts contain infected and death cases by ethnicity. ‘Infected percentage in ratio’ means the number of infected cases in one race divided by all infected cases. It shows the distribution of COVID-19 infected cases by ethnicity. ‘Deaths percentage in ratio’ means the number of death cases in one race divided by all deaths cases. It shows the distribution of COVID-19 death cases by ethnicity. ‘Ethnicity percentage in ratio’ means the distribution of the US population by ethnicity.
+By comparing these three bar charts, we can get a direct sense of whether there are differences between the actual ethnicity ratio in US and true deaths/cases ratio by ethnicity. Moreover, we add cases in 1000 and deaths in 1000 to directly shows which race is affected most by COVID-19 and which is the least. Thus, we can get a intuitive idea of whether the COVID-19 situation differs by race. Otherwise, in the static bar plot, we cannot get the direct sense of how the ratio change by race. An interactive map has the advantages to compare both how ratio differs by ethnicity and how ratio differs in expected value(real ethnicity ratio) and true value(real death cases/infected races).</p>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<!-- Add 3 buttons -->
+<button onclick="update(data1)">
+Infected percentage in ratio
+</button>
+<button onclick="update(data2)">
+Deaths percentage in ratio
+</button>
+<button onclick="update(data3)">
+Ethnicity percentage in ratio
+</button>
+<button onclick="update(data4)">
+Cases in 1000
+</button>
+<button onclick="update(data5)">
+Deaths in 1000
+</button>
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz">
 
 </div>
+<script>
+
+// create 2 data_set
+var data1 = [
+   {group: "White", value: 58},
+   {group: "Hispanic", value: 24.1},
+   {group: "Black", value: 13.0},
+   {group: "Asian", value: 3.1},
+   {group: "AIAN", value: 1.2},
+   {group: "Multiracial", value: 0.9},
+   {group: "NHPI", value: 0.31}
+  
+];
+
+var data2 = [
+   {group: "White", value: 61},
+   {group: "Hispanic", value: 18.8},
+   {group: "Black", value: 15.1},
+   {group: "Asian", value: 3.5},
+   {group: "AIAN", value: 1},
+   {group: "Multiracial", value: 0.4},
+   {group: "NHPI", value: 0.2}
+  
+];
+
+var data3 = [
+   {group: "White", value: 61.2},
+   {group: "Hispanic", value: 15.3},
+   {group: "Black", value: 13.4},
+   {group: "Asian", value: 5.9},
+   {group: "AIAN", value: 1.3},
+   {group: "Multiracial", value: 2.7},
+   {group: "NHPI", value: 0.2}
+];
+
+var data4 = [
+   {group: "White", value: 52.4},
+   {group: "Hispanic", value: 87.7},
+   {group: "Black", value: 53.9},
+   {group: "Asian", value: 5.9},
+   {group: "AIAN", value: 28.9},
+   {group: "Multiracial", value: 18.5},
+   {group: "NHPI", value: 76.1}
+];
+
+var data5 = [
+   {group: "White", value: 1.5},
+   {group: "Hispanic", value: 1.8},
+   {group: "Black", value: 1.6},
+   {group: "Asian", value: 0.9},
+   {group: "AIAN", value: 1.1},
+   {group: "Multiracial", value: 0.2},
+   {group: "NHPI", value: 1.2}
+];
+
+// set the dimensions and margins of the graph
+var margin = {top: 20, right: 3, bottom: 20, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// X axis
+var x = d3.scaleBand()
+  .range([ 0, width ])
+  .domain(data1.map(function(d) { return d.group; }))
+  .padding(0.2);
+svg.append("g")
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(x))
+
+// Add Y axis
+var y = d3.scaleLinear()
+  .domain([0, 100])
+  .range([ height, 0]);
+svg.append("g")
+  .attr("class", "myYaxis")
+  .call(d3.axisLeft(y));
+
+// A function that create / update the plot for a given variable:
+function update(data) {
+
+  var u = svg.selectAll("rect")
+    .data(data)
+
+  u
+    .enter()
+    .append("rect")
+    .merge(u)
+    .transition()
+    .duration(1000)
+      .attr("x", function(d) { return x(d.group); })
+      .attr("y", function(d) { return y(d.value); })
+      .attr("width", x.bandwidth())
+      .attr("height", function(d) { return height - y(d.value); })
+      .attr("fill", "#69b3b2")
+}
+
+// Initialize the plot with the first dataset
+update(data1)
+
+</script>
+
 </div>
 </div>
             </section>
@@ -178,8 +283,8 @@
           </div>
         </div>
       </div>
-<a href="data-sources.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="missing-values.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="results.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="conclusion.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -210,7 +315,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/https://github.com/asu-233/COVID/edit/main/03-cleaning.Rmd",
+"link": "https://github.com/https://github.com/asu-233/COVID/edit/main/06-interactive.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -218,7 +323,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/https://github.com/asu-233/COVID/blob/main/03-cleaning.Rmd",
+"link": "https://github.com/https://github.com/asu-233/COVID/blob/main/06-interactive.Rmd",
 "text": null
 },
 "download": null,

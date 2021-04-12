@@ -1,6 +1,6 @@
 # Data sources
 
-All the data we use come from websites with ".gov" domain name for the sake of accuracy and reliability. Data are either collected by the Centers for Disease Control and Prevention (CDV) or John Hopkins University (JHU).
+All the data we use come from websites with ".gov" domain name for the sake of accuracy and reliability. Data are either collected by the Centers for Disease Control and Prevention (CDC) or John Hopkins University (JHU).
 
 There are several notable points about our datasets:
 

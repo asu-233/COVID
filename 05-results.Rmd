@@ -181,8 +181,10 @@ Therefore, the pandemic did not start before 2020. Based on only data and plots,
 
 ## Belief 3
 
+Starting from this section, we will be examining infection rate. Therefore, we will use the reported COVID-related data rather than all-cause death counts.
+
 ### Country
-We gathered the data from 2020-04-12	to 2021-04-03	in US. In the 3rd of April, more than 30M people in the US has been infected with coronavirus and 0.6M people has dead because of covid. From April in 2020 to November in 2020, there are steady increase in the number of confirmed people but after November, there is a surge in the number of confirmed people until February 2021, the surge trend has been slowing down.
+We gathered the data from 2020-04-12	to 2021-04-03	in US. In the 3rd of April, more than 30M people in the US has been infected with coronavirus and 0.6M people has dead because of COVID. From April in 2020 to November in 2020, there are steady increase in the number of confirmed people. After November, there is a surge in the number of confirmed people until February 2021 and the increasing trend has been slowing down.
 
 ```{r}
 data1 <- data %>%
@@ -207,7 +209,7 @@ data1 %>%  ggplot(aes(x=Date, y = n, color=group)) +
 
 ### State
 
-After getting the sense of the overall country,  I have displayed Top 5 states in terms of number of cumulated confirmed cases as below. In terms of confirmed case, California is top 1: 487.1 million people has beed afftected by covid 19 in total, followed by Texas and Florida, 390.1 and 304.7 seperately. In terms of Deaths case, New York has most death cases (12.5M) followed by California and Texas. The death rate of New York (4.7%) is much higher than California (1.5%) though the confirmed case of California is larger than the confirmed case of New York .
+After getting the sense of the overall country,  we have displayed Top 5 states in terms of number of accumulated confirmed cases as below. In terms of confirmed case, California is top 1: 487.1 million people has been affected by COVID-19 in total, followed by Texas and Florida, 390.1 and 304.7 separately. In terms of Deaths case, New York has most death cases (12.5M) followed by California and Texas. The death rate of New York (4.7%) is much higher than California (1.5%) though the confirmed case of California is larger than the confirmed case of New York .
 
 
 ```{r}
@@ -231,11 +233,14 @@ data %>%
 
 #### State over time
 
-After observing the overall cases in cumulated term, we want to see how the Confirmed/Deaths number change in state throughout time.
-New York shows the sudden increase at the beginning of the pandemic and has the most cases. However, it showed a little sluggish relatively during summer on both confirmed cases and death cases until the end of the 2020 there is a surge increase.
-California and Texas have very similar trend at the beginning of the pandemic. Though the change of confirmed cases and death cases is fluctuating in this state, it keep increasing at a high speed. The increasing speed in confirmed cases of California exceed that of Texas around December of 2020 and after then California became the number one over all states in terms of confirmed cases. After Feb of 2021, The daily deathed cases of California surpassed New York and became the Number one over all states.
-Floria keeps a steady increase pace in terms of both death cases and confirmed cases and on April 2021, the daily confirmed case in Florida ranked 3rd and death cases ranked fourth over all States.
-Illiniois has slowest increasing speed compared to other four states at the beginning of pandemic. However, around Nov 2020, there is a sudden increase in daily cases. Illiniois ranked fifth in both daily confrimed cases and death cases on April 2021.
+After observing the overall cases in accumulated term, we want to see how the Confirmed/Deaths number change in state over time.
+New York showed a sudden increase at the beginning of the pandemic and had the most cases. However, the increasing became relatively sluggish after summer on both confirmed cases and death cases until the end of the 2020 where there is a surge in the numbers.
+
+California and Texas have very similar trends at the beginning of the pandemic. Though the change of confirmed cases and death cases was fluctuating in the two states, the overall trend was increasing at a high speed. The increasing speed in confirmed cases of California exceeded that of Texas around December of 2020 and after then California became the first place over all states in terms of confirmed cases. After Feb of 2021, The daily death cases of California surpassed New York and became the Number one over all states.
+
+Florida kept a steady increasing pace in both death cases and confirmed cases and on April 2021, the daily confirmed case in Florida ranked 3rd and death cases ranked fourth over all States.
+
+Illinois had slowest increasing speed compared to other four states at the beginning of pandemic. However, around Nov 2020, there was a sudden increase in daily cases. Illinois ranked fifth in both daily confrimed cases and death cases in April 2021.
 
 
 
@@ -283,14 +288,14 @@ fig <- fig %>% layout(
 fig
 ```
 
-To conclude,We noticed that there are clearly difference between each state in terms of confirmed and death cases. The increasing pattern over time for each state varies as well. These difference may due to complicated factors including density of population, mobility of population, government policy, state actions and etc.
+To conclude, we noticed that there are clearly differences between states in terms of confirmed and death cases. The increasing pattern over time for each state varies as well. These difference may due to complicated factors including density of population, mobility of population, government policy, state actions and etc.
 
 
-###3 Race
+### Race
 
 #### Cases of Race in Different State
 
-We selected the most recent date avaible in our dataset (2021-03-07) and plot the number of confirmed cases for Asian, White and Black, Hispanic in the top 5 states in terms of number of confirmed cases individualy. We noticed that hispanic has most cases in California followed by Florida. The cases in Illinios and New Jersy has far more less that that in California in hispanic race. The total number of white cases ranked number one among all race and it distributed evenly among the top 5 states: California, Florida, Ohio, Pennsylvania and Tennessee. Asian has most confirmedcases in California and the total cases is the smallest compared to other three race. Black has even distribution for confirmed cases in top 5 states. 
+We selected the most recent date available in our dataset (2021-03-07) and plot the number of confirmed cases for Asian, White and Black, Hispanic in the top 5 states in terms of number of confirmed cases individually. 
 
 
 ```{r}
@@ -401,12 +406,14 @@ merged_subset <- cbind.data.frame (merged_subset,
                                    Deaths_percent = merged_subset$Deaths_Total/sum(merged_subset$Deaths_Total))
 ``` 
 
+We noticed that Hispanic had most cases in California followed by Florida. The cases in Illinois and New Jersey had far more less that that in California in Hispanic race. The total number of white cases ranked number one among all race and it distributed evenly among the top 5 states: California, Florida, Ohio, Pennsylvania and Tennessee. Asian haD most confirmed cases in California and the total cases was the smallest compared to other three race. Black had relatively even distribution for confirmed cases in top 5 states. 
 
 
 #### Cases of Race per 100000 People 
 
-In the above information, we only know white people has most cases in absolute value but we cannot conclude that white people has higher risk for covid 19, since white people may consititue for the highest population in US thus it has highest cases.Thus, I added population number for each ethinicity and calulated the cases propotion over their own ethnicity population individually (infection rate and death rate). In our analysis, we only considered main ethinicity "White", "Hispanic", "Black", "Asian", "Multiracial", "AIAN", "NHPI". We displayed the COVID-19 cases per 100,000 people by ethnicity below. From graph, we noticed that in 100000 Hispanic people, 88 people was affected by covid and 2 people was dead due to covid-19. Hispanic has highest infection rate and death rate due to covid-19 among seven race. NHPI was ranked second. Among 100000 NHPI people, 76 people was affected by covid and 2 people was dead due to covid-19. It is note worthy that though white has largest number of confirmed cases and death cases in total, its infection rate and death rate is ranked fourth and thrid among these seven races. We may conclude that Hispanic and NHPI may be more vulnerable to COVID-19 compared with other races.
+From the information above, we only know white people has the most cases in absolute value but we cannot conclude that white people has higher risk for COVID, since white people may constitute for the highest population in US, thus it is expected to have the highest cases. Thus, we added population number for each ethnicity and calculated the cases proportion over their own ethnicity population (infection rate and death rate). 
 
+In our analysis, we would only account for the main ethnicity: "White", "Hispanic", "Black", "Asian", "Multiracial", "AIAN", "NHPI". COVID cases per 100,000 people are displayed by ethnicity.
 
 
 ```{r}
@@ -429,12 +436,19 @@ grid.arrange(p1, p2, ncol = 2, top = "COVID-19 cases per 100,000 people by Race"
 ```
 
 
+From graph, we noticed that in 100,000 Hispanic people, 88 were affected by COVID and 2 died with COVID. Hispanic has THE highest infection rate and death rate due to COVID among seven race.
+
+NHPI was ranked the second. Among 100,000 NHPI people, 76 people were affected by COVID and 2 people were dead due to COVID. 
+
+It is noteworthy that though white has the largest number of confirmed cases and death cases in total, its infection rate and death rate is ranked the fourth and the third among these seven races. It seems that Hispanic and NHPI may be more vulnerable to COVID-19 compared with other races.
 
 
 
-#### Cases of Race per 100000 People 
+#### Cases of Race per 100,000 People 
 
-We want to investigate whether or not there is a significant difference in the number of COVID-19 deaths by ethnicity in the United States by using statistic method. By doing so, we compared the distribution of the US population by ethnicity to the distribution of COVID-19 deaths by ethnicity. The left pie chart shows the death cases percentage for each race and the right pie chart shows the actual ethnicity ratio in US.
+We want to investigate whether or not there is a significant difference in the number of COVID deaths by ethnicity in the United States by using statistical methods. We would like to compare the distribution of the US population by ethnicity with the distribution of COVID-19 deaths by ethnicity. 
+
+Visually, we used pie charts. The left pie chart shows the death cases percentage for each race and the right pie chart shows the actual ethnicity ratio in US.
 
 
 ```{r}
@@ -462,11 +476,11 @@ grid.arrange(p3, p4, ncol = 2, top = "Percentage of the US population by ethnici
 
 
 Chi-Squared Test
-We used chi-sqaured test to test if the distribution of the US population by ethnicity is significantly different than the distribution of COVID-19 deaths by ethnicity. 
+Mathematically, We used chi-squared test.
 
-Our null hypothesis (H0)  is that the distribution of our sample data (the number of COVID-19 deaths by race) matches the distribution of the population of the US by race.
+Our null hypothesis, $H_0$ is that the distribution of our sample data (the number of COVID deaths by race) matches the distribution of the population of the US by race.
 
-Our alternative hypothesis (Ha) here is that the distribution of our sample data does not match the distribution of the population of the US by race.
+Our alternative hypothesis, $H_a$ here is that the distribution of our sample data does not match the distribution of the population of the US by race.
 
 
 ```{r}
@@ -476,7 +490,7 @@ expected_frequency <- merged_subset$race_ethnicity_percents
 chisq.test(observed_frequency_deaths, p = expected_frequency) 
 ```
 
-P- value is less than 2.2e-16 and X-squared = 19118. Since P- value is really small (less than 0.05), we can reject the null hypothesis at alpha level 0.05 and conclude that the distribution of COVID-19 deaths by race do not match what we would expect them to be (based on the distribution of population by race). It means some race may be more vulnerable to COVID-19 and some others are not.
+P- value is less than 2.2e-16 and X-squared = 19118. Since P- value is really small (less than 0.05), we can reject the null hypothesis at alpha level 0.05 and conclude that the distribution of COVID deaths by race do not match what we would expect them to be (based on the distribution of population by race). It means some race may be more vulnerable to COVID-19 and some others are not.
 
 
 
