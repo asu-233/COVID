@@ -13,7 +13,7 @@ There are several notable points about our datasets:
 ## Belief 3
 
 1. The raw data we used for analyzing COVID-19 situation in terms of state is obtained from repository of the 2019 Novel Coronavirus Visual Dashboard operated by the Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE). It contains data of state name, latitude, longitude, the number of daily death case and daily confirmed case across different state from 2020-04-12 to 2021-04-03.
-2. The raw data we used for analyzing COVID-19 situation in terms of race is obtained from 'The COVID Tracking Project' ( https://covidtracking.com/race/about#download-the-data) and it contains the number of daily COVID-19 cases and deaths by race by US state from 2020-04-12 to 2021-03-07. We also get each state's overall population in 2020 from United States Census official website (link: https://www.census.gov/programs-surveys/popest/technical-documentation/research/evaluation-estimates.html).
+2. The raw data we used for analyzing COVID-19 situation in terms of race is obtained from 'The COVID Tracking Project' ( https://covidtracking.com/race/about#download-the-data) and it contains the number of daily COVID-19 cases and deaths by race by US state from 2020-04-12 to 2021-03-07. We also get each state's overall population in 2020 from United States Census official website (https://www.census.gov/programs-surveys/popest/technical-documentation/research/evaluation-estimates.html).
 
 
 ```{R}
